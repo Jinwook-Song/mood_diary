@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "833721022726",
+    "project_id": "mood-diary-jw",
+    "storage_bucket": "mood-diary-jw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833721022726:android:79dc4ed0abb906feeb4687",
+        "android_client_info": {
+          "package_name": "com.example.mood_diary"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkyza4xszdIk6WJri-PgTift6G8LzxUng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

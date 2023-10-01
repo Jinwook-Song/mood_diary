@@ -19,7 +19,7 @@ class Routes {
 }
 
 final router = GoRouter(
-  initialLocation: '/write',
+  initialLocation: '/',
   routes: [
     GoRoute(
       name: Routes.signupScreen['name'],
