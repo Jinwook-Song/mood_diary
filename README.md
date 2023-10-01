@@ -1,8 +1,8 @@
 # mood_diary
 
 - mvp
-  [] sign up
-  [] sign in
-  [] create diary
-  [] read diary
-  [] delete diary
+  - [x] sign up
+  - [x] sign in
+  - [x] create diary
+  - [x] read diary
+  - [x] delete diary
