@@ -23,6 +23,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           postId: postId,
           creatorUid: creatorUid,
         );
+    if (context.mounted) {
+      context.pop();
+    }
   }
 
   void _onLongPress({required String postId, required String creatorUid}) {

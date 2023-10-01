@@ -41,8 +41,6 @@ class PostDeleteViewModel extends AsyncNotifier<void> {
     if (context.mounted) {
       if (state.hasError) {
         showFirebaseErrorSnackBar(context, state.error);
-      } else {
-        context.pop();
       }
     }
   }
