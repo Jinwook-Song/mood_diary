@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:mood_diary/authentication/views/login_screen.dart';
-import 'package:mood_diary/authentication/views/signup_screen.dart';
+import 'package:mood_diary/features/authentication/views/login_screen.dart';
+import 'package:mood_diary/features/authentication/views/signup_screen.dart';
 import 'package:mood_diary/common/widgets/main_navigation.dart';
 
 class Routes {

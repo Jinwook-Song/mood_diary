@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mood_diary/common/widgets/navigation_tab.dart';
-import 'package:mood_diary/main/views/home_screen.dart';
-import 'package:mood_diary/main/views/write_screen.dart';
+import 'package:mood_diary/features/main/views/home_screen.dart';
+import 'package:mood_diary/features/main/views/write_screen.dart';
 
 const List<String> _tabs = [
   'home',

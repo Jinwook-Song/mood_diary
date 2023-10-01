@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_diary/firebase_options.dart';
 import 'package:mood_diary/routes.dart';
@@ -12,11 +13,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MoodDiary()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MoodDiary extends StatelessWidget {
+  const MoodDiary({super.key});
 
   // This widget is the root of your application.
   @override
