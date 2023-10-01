@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_diary/common/widgets/button.dart';
+import 'package:mood_diary/features/main/view_models/post_upload.dart';
 import 'package:mood_diary/main.dart';
 
 const List<String> moods = [
@@ -23,12 +24,39 @@ class WriteScreen extends ConsumerStatefulWidget {
 }
 
 class _WriteScreenState extends ConsumerState<WriteScreen> {
+  final TextEditingController _textEditingController = TextEditingController();
+  String? _mood;
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
   void _onScaffoldTap() {
     FocusScope.of(context).unfocus();
   }
 
+  void _onMoodTap(String mood) {
+    _mood = mood;
+    setState(() {});
+  }
+
+  void _onSubmit() {
+    if (_mood == null) return;
+    ref.read(postUploadProvider.notifier).uploadPost(
+          context: context,
+          mood: _mood!,
+          diary: _textEditingController.text,
+        );
+    _onScaffoldTap();
+    _textEditingController.text = '';
+    _mood = null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(postUploadProvider).isLoading;
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
@@ -69,9 +97,10 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                       ),
                     ],
                   ),
-                  child: const TextField(
+                  child: TextField(
                     maxLines: 4,
-                    decoration: InputDecoration(
+                    controller: _textEditingController,
+                    decoration: const InputDecoration(
                         contentPadding: EdgeInsets.all(12),
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -90,36 +119,44 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     for (final mood in moods)
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                          boxShadow: const [
-                            BoxShadow(
+                      GestureDetector(
+                        onTap: () => _onMoodTap(mood),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
+                          width: mood == _mood ? 36 : 32,
+                          height: mood == _mood ? 36 : 32,
+                          decoration: BoxDecoration(
+                            color: mood == _mood ? Colors.amber : Colors.white,
+                            border: Border.all(
                               color: Colors.black,
-                              spreadRadius: 0.1,
-                              blurRadius: 0,
-                              offset: Offset(0, 1.5),
                             ),
-                          ],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          mood,
-                          style: const TextStyle(fontSize: 20),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black,
+                                spreadRadius: 0.1,
+                                blurRadius: 0,
+                                offset: Offset(0, 1.5),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            mood,
+                            style: const TextStyle(fontSize: 20),
+                          ),
                         ),
                       )
                   ],
                 ),
                 const SizedBox(height: 48),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 48),
-                  child: Button(text: 'Post'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 48),
+                  child: GestureDetector(
+                      onTap: _onSubmit,
+                      child: isLoading
+                          ? const CircularProgressIndicator.adaptive()
+                          : const Button(text: 'Post')),
                 )
               ],
             ),

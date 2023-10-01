@@ -13,3 +13,16 @@ void showFirebaseErrorSnackBar(
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+
+void showErrorSnackBar(
+  BuildContext context,
+  String error,
+) {
+  final snackBar = SnackBar(
+    showCloseIcon: true,
+    content: Text(
+      error,
+    ),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}

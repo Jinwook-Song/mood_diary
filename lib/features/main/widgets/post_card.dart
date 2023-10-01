@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
   final String mood;
   final String diary;
   final int createdAt;
-  const PostCard(
-      {super.key,
-      required this.mood,
-      required this.diary,
-      required this.createdAt});
+  const PostCard({
+    super.key,
+    required this.mood,
+    required this.diary,
+    required this.createdAt,
+  });
+
+  String get _timeFormat {
+    return DateFormat.yMMMMEEEEd()
+        .add_jm()
+        .format(DateTime.fromMillisecondsSinceEpoch(createdAt));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Opacity(opacity: 0.5, child: Text('$createdAt'))
+          Opacity(opacity: 0.5, child: Text(_timeFormat))
         ],
       ),
     );

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mood_diary/features/main/view_models/post_delete.dart';
+import 'package:mood_diary/features/main/view_models/post_load.dart';
 import 'package:mood_diary/features/main/widgets/post_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -11,8 +14,18 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  void _onLongPress(int index) {
-    print(index);
+  Future<void> _onDelete({
+    required String postId,
+    required String creatorUid,
+  }) async {
+    await ref.read(postDeleteProvider.notifier).deletePost(
+          context: context,
+          postId: postId,
+          creatorUid: creatorUid,
+        );
+  }
+
+  void _onLongPress({required String postId, required String creatorUid}) {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -22,13 +35,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         message: const Text('Are you sure you want to do this?'),
         actions: [
           CupertinoActionSheetAction(
-            onPressed: () => {},
+            onPressed: () => _onDelete(postId: postId, creatorUid: creatorUid),
             isDestructiveAction: true,
             child: const Text('Delete'),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
           isDestructiveAction: false,
           child: const Text(
             'Cancel',
@@ -43,25 +56,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('🔥 MOOD 🔥'),
-      ),
-      body: ListView.separated(
-        itemCount: 20,
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onLongPress: () => _onLongPress(index),
-            child: PostCard(
-                mood: '😍',
-                diary:
-                    'Today i feel amazing! I really like Flutter, I love building beautiful things!',
-                createdAt: DateTime.now().millisecondsSinceEpoch),
+    return ref.watch(postLoadProvider).when(
+        loading: () => const CircularProgressIndicator.adaptive(),
+        error: (error, stackTrace) => Center(
+              child: Text(error.toString()),
+            ),
+        data: (data) {
+          return Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: const Text('🔥 MOOD 🔥'),
+            ),
+            body: ListView.separated(
+              itemCount: data.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onLongPress: () => _onLongPress(
+                    postId: data[index].id,
+                    creatorUid: data[index].creatorUid,
+                  ),
+                  child: PostCard(
+                      mood: data[index].mood,
+                      diary: data[index].diary,
+                      createdAt: data[index].createdAt),
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
+        });
   }
 }

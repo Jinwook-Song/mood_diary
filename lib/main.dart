@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_diary/firebase_options.dart';
 import 'package:mood_diary/routes.dart';
@@ -13,6 +14,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+
   runApp(const ProviderScope(child: MoodDiary()));
 }
 

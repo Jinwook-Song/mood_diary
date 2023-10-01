@@ -34,9 +34,9 @@ class AuthRepo {
   }
 }
 
-final authProvider = Provider((ref) => AuthRepo());
+final authRepo = Provider((ref) => AuthRepo());
 // 유저의 인증 상태변화를 계속해서 감지
 final authStateProvider = StreamProvider((ref) {
-  final repo = ref.read(authProvider);
+  final repo = ref.read(authRepo);
   return repo.authStateChanges();
 });
